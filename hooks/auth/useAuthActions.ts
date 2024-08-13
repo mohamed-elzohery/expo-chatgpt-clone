@@ -46,7 +46,6 @@ const useAuthActions = () => {
         emailAddress,
         password,
       });
-      console.log(result)
       // This indicates the user is signed in
       signupSetActive({ session: result.createdSessionId });
     } catch (err: any) {

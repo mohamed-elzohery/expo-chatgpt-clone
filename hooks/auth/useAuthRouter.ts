@@ -8,7 +8,6 @@ SplashScreen.preventAutoHideAsync();
 
 const useAuthRouter = () => {
     const { isLoaded: authDataLoaded, isSignedIn } = useAuth();
-            console.log("useAuthFored")
 
     const segments = useSegments();
     const router = useRouter();
@@ -16,7 +15,7 @@ const useAuthRouter = () => {
         if (!authDataLoaded) return;
         const inAuthGroup = segments[0] === 'auth';
         if (isSignedIn && !inAuthGroup) {
-        router.replace('/auth/');
+        router.replace('/auth/drawer');
         } else if (!isSignedIn) {
         router.replace('/');
         }
