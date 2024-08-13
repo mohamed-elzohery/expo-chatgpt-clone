@@ -101,7 +101,7 @@ const Layout = () => {
       }}
     >
       <Drawer.Screen
-        name="chat/index"
+        name="chat/new"
         options={{
           title: "ChatGPT",
           drawerIcon: () => (
@@ -151,12 +151,6 @@ const Layout = () => {
               <Ionicons name="apps-outline" size={18} color={Colors.grey} />
             </View>
           ),
-        }}
-      />
-      <Drawer.Screen
-        name="chat/new/index"
-        options={{
-          drawerItemStyle: { display: "none" },
         }}
       />
     </Drawer>
