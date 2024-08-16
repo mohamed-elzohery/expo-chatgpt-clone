@@ -30,6 +30,7 @@ const MessageIdeas: React.FC<MessageIdeasProps> = ({ onSelectMessage }) => {
       >
         {PredefinedMessages.map((message) => (
           <TouchableOpacity
+            key={message.title}
             style={styles.card}
             onPress={() => onSelectMessage(`${message.title}: ${message.text}`)}
           >
