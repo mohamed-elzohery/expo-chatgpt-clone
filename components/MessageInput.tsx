@@ -1,5 +1,5 @@
 import { View, StyleSheet, KeyboardAvoidingView, Platform } from "react-native";
-import React, { FC, useEffect, useRef } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Animated, {
   Extrapolation,
@@ -15,6 +15,7 @@ import Colors from "@/constants/Colors";
 import { defaultStyles } from "@/constants/Styles";
 import * as DocumentPicker from "expo-document-picker";
 import * as ImagePicker from "expo-image-picker";
+import debounce from "@/utils/performance/debounce";
 
 export interface MessageInputProps {
   onShouldSendMessage: (message: string) => void;
@@ -26,9 +27,8 @@ const AnimatedTouchableOpacity =
 const MessageInput: FC<MessageInputProps> = ({ onShouldSendMessage }) => {
   const { bottom } = useSafeAreaInsets();
   const expanded = useSharedValue(0);
-
-  const messageRef = useRef<string>("");
-
+  const [message, setMessage] = useState("");
+  console.log(message);
   const expandItems = () => {
     expanded.value = withTiming(1, { duration: 400 });
   };
@@ -71,12 +71,11 @@ const MessageInput: FC<MessageInputProps> = ({ onShouldSendMessage }) => {
 
   const handleOnChange = (text: string) => {
     collapseItems();
-    messageRef.current = text;
+    debounce(() => setMessage(text), 500);
   };
   const onSend = () => {
-    onShouldSendMessage(messageRef.current);
-    console.log(messageRef.current);
-    messageRef.current = "";
+    onShouldSendMessage(message);
+    setMessage("");
   };
   return (
     <KeyboardAvoidingView
@@ -122,7 +121,7 @@ const MessageInput: FC<MessageInputProps> = ({ onShouldSendMessage }) => {
             onFocus={collapseItems}
             onChangeText={handleOnChange}
           />
-          {messageRef.current.length > 0 ? (
+          {message.length > 0 ? (
             <TouchableOpacity onPress={onSend}>
               <Ionicons
                 name="arrow-up-circle-outline"
@@ -131,7 +130,7 @@ const MessageInput: FC<MessageInputProps> = ({ onShouldSendMessage }) => {
               />
             </TouchableOpacity>
           ) : (
-            <TouchableOpacity onPress={onSend}>
+            <TouchableOpacity>
               <FontAwesome5 name="headphones" size={24} color={Colors.grey} />
             </TouchableOpacity>
           )}
