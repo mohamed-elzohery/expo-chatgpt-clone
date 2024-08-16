@@ -72,7 +72,6 @@ const MessageInput: FC<MessageInputProps> = ({ onShouldSendMessage }) => {
   const handleOnChange = (text: string) => {
     collapseItems();
     messageRef.current = text;
-    console.log(messageRef.current);
   };
   const onSend = () => {
     onShouldSendMessage(messageRef.current);
@@ -123,7 +122,7 @@ const MessageInput: FC<MessageInputProps> = ({ onShouldSendMessage }) => {
             onFocus={collapseItems}
             onChangeText={handleOnChange}
           />
-          {1 > 0 ? (
+          {messageRef.current.length > 0 ? (
             <TouchableOpacity onPress={onSend}>
               <Ionicons
                 name="arrow-up-circle-outline"

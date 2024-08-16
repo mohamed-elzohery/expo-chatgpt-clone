@@ -45,7 +45,6 @@ const index = () => {
         style={{
           flex: 1,
           justifyContent: "flex-start",
-          backgroundColor: "red",
         }}
       >
         {/* <ScrollView>
