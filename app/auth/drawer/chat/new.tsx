@@ -4,6 +4,7 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
+  Keyboard,
 } from "react-native";
 import React, { useState } from "react";
 import { useAuth } from "@clerk/clerk-expo";
@@ -12,15 +13,17 @@ import { Stack } from "expo-router";
 import HeaderDropDown from "@/components/HeaderDropdown";
 import MessageInput from "@/components/MessageInput";
 import { ScrollView } from "react-native-gesture-handler";
+import MessageIdeas from "@/components/MessageIdeas";
 
 const index = () => {
   const { signOut } = useAuth();
   const [gptVersion, setGptVersion] = useState("");
+  const [messages, setMessages] = useState<[]>([]);
   const onGptVersionChange = (version: string) => {
     setGptVersion(version);
   };
   const getCompletions = (message: string) => {
-    console.log("^");
+    console.log(message);
   };
 
   return (
@@ -44,22 +47,23 @@ const index = () => {
       <View
         style={{
           flex: 1,
-          justifyContent: "flex-start",
+          justifyContent: "center",
+        }}
+        onTouchStart={() => Keyboard.dismiss()}
+      ></View>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "android" ? "height" : "padding"}
+        keyboardVerticalOffset={60}
+        style={{
+          position: "absolute",
+          left: 0,
+          bottom: 0,
+          width: "100%",
         }}
       >
-        {/* <ScrollView>
-          {Array(100)
-            .fill("")
-            .map((item, index) => (
-              <Text>Message {index}</Text>
-            ))}
-        </ScrollView> */}
-        {/* <TouchableOpacity onPress={() => signOut()}>
-          <Text>Sign Out</Text>
-        </TouchableOpacity> */}
-      </View>
-
-      <MessageInput onShouldSendMessage={getCompletions} />
+        <MessageIdeas onSelectMessage={getCompletions} />
+        <MessageInput onShouldSendMessage={getCompletions} />
+      </KeyboardAvoidingView>
     </View>
   );
 };
