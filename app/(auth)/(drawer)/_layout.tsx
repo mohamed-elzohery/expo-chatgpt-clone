@@ -44,7 +44,7 @@ const CustomDrawerElement = (props: any) => {
       </DrawerContentScrollView>
       {/* Footer */}
       <View>
-        <Link href="/auth/modal/settings" asChild push>
+        <Link href="/(auth)/(modal)/settings" asChild push>
           <TouchableOpacity style={styles.footer}>
             <Image
               source={{ uri: "https://galaxies.dev/img/meerkat_2.jpg" }}
@@ -114,7 +114,7 @@ const Layout = () => {
           ),
           headerRight: () => (
             <View>
-              <Link href="/auth/drawer/chat/new" push asChild>
+              <Link href="/(auth)/(drawer)/chat/new" push asChild>
                 <TouchableOpacity>
                   <Ionicons
                     name="create-outline"
@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFF",
     padding: 12,
     paddingBottom: 0,
-    marginBottom: -10,
+    marginBottom: -40,
   },
   searchSection: {
     flexDirection: "row",

@@ -12,83 +12,40 @@ import { FlashList } from "@shopify/flash-list";
 import React, { useState } from "react";
 import { useAuth } from "@clerk/clerk-expo";
 import { defaultStyles } from "@/constants/Styles";
-import { Stack } from "expo-router";
+import { Redirect, Stack, useRouter } from "expo-router";
 import HeaderDropDown from "@/components/HeaderDropdown";
 import MessageInput from "@/components/MessageInput";
 import { ScrollView } from "react-native-gesture-handler";
 import MessageIdeas from "@/components/MessageIdeas";
 import ChatMessage from "@/components/ChatMessage";
 import { Message, Role } from "@/utils/interfaces/Messages";
-
-const Dummy_Messages: Message[] = [
-  {
-    content: "m est dolor optio obcaecati explicabo alias voluptate ad?",
-    role: Role.User,
-  },
-  {
-    content:
-      "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Unde itaque excepturi dolorum est dolor optio obcaecati explicabo alias voluptate ad?, Lorem ipsum dolor sit, amet consectetur adipisicing elit. Unde itaque excepturi dolorum est dolor optio obcaecati explicabo alias voluptate ad?",
-    role: Role.Bot,
-  },
-  {
-    content: "m est dolor optio obcaecati explicabo alias voluptate ad?",
-    role: Role.User,
-  },
-  {
-    content:
-      "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Unde itaque excepturi dolorum est dolor optio obcaecati explicabo alias voluptate ad?, Lorem ipsum dolor sit, amet consectetur adipisicing elit. Unde itaque excepturi dolorum est dolor optio obcaecati explicabo alias voluptate ad?",
-    role: Role.Bot,
-  },
-  {
-    content: "m est dolor optio obcaecati explicabo alias voluptate ad?",
-    role: Role.User,
-  },
-  {
-    content:
-      "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Unde itaque excepturi dolorum est dolor optio obcaecati explicabo alias voluptate ad?, Lorem ipsum dolor sit, amet consectetur adipisicing elit. Unde itaque excepturi dolorum est dolor optio obcaecati explicabo alias voluptate ad?",
-    role: Role.Bot,
-  },
-  {
-    content: "m est dolor optio obcaecati explicabo alias voluptate ad?",
-    role: Role.User,
-  },
-  {
-    content:
-      "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Unde itaque excepturi dolorum est dolor optio obcaecati explicabo alias voluptate ad?, Lorem ipsum dolor sit, amet consectetur adipisicing elit. Unde itaque excepturi dolorum est dolor optio obcaecati explicabo alias voluptate ad?",
-    role: Role.Bot,
-  },
-  {
-    content: "m est dolor optio obcaecati explicabo alias voluptate ad?",
-    role: Role.User,
-  },
-  {
-    content:
-      "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Unde itaque excepturi dolorum est dolor optio obcaecati explicabo alias voluptate ad?, Lorem ipsum dolor sit, amet consectetur adipisicing elit. Unde itaque excepturi dolorum est dolor optio obcaecati explicabo alias voluptate ad?",
-    role: Role.Bot,
-  },
-];
+import { useMMKVString } from "react-native-mmkv";
+import { Storage } from "@/utils/storage";
+import { Drawer } from "expo-router/drawer";
 
 const index = () => {
   const { signOut } = useAuth();
-  const [gptVersion, setGptVersion] = useState("");
+  const [gptVersion, setGptVersion] = useMMKVString("gptVersion", Storage);
+  const [apiKey, setApiKey] = useMMKVString("apiKey", Storage);
+  const [organization, setOrganization] = useMMKVString("org", Storage);
+  const router = useRouter();
   const [height, setHeight] = useState(0);
 
-  const [messages, setMessages] = useState<Message[]>(Dummy_Messages);
+  const [messages, setMessages] = useState<Message[]>([]);
   const onGptVersionChange = (version: string) => {
     setGptVersion(version);
   };
   const onLayout = (event: any) => {
     const { height } = event.nativeEvent.layout;
-    console.log(height);
     setHeight(height);
   };
-  const getCompletions = (message: string) => {
-    console.log(message);
-  };
-
+  const getCompletions = (message: string) => {};
+  if (!apiKey || !organization) {
+    return <Redirect href="/(auth)/(modal)/settings" />;
+  }
   return (
     <View style={defaultStyles.pageContainer}>
-      <Stack.Screen
+      <Drawer.Screen
         options={{
           headerTitle: () => (
             <HeaderDropDown
