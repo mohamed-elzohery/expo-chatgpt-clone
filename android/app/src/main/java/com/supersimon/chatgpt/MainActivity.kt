@@ -1,4 +1,4 @@
-package com.elzohery.chatgpt
+package com.supersimon.chatgpt
 
 import android.os.Build
 import android.os.Bundle
