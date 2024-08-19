@@ -1,5 +1,5 @@
 import { View, StyleSheet, KeyboardAvoidingView, Platform } from "react-native";
-import React, { FC, useState } from "react";
+import React, { FC, useCallback, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Animated, {
   Extrapolation,
@@ -28,7 +28,6 @@ const MessageInput: FC<MessageInputProps> = ({ onShouldSendMessage }) => {
   const { bottom } = useSafeAreaInsets();
   const expanded = useSharedValue(0);
   const [message, setMessage] = useState("");
-  console.log(message);
   const expandItems = () => {
     expanded.value = withTiming(1, { duration: 400 });
   };
@@ -69,10 +68,11 @@ const MessageInput: FC<MessageInputProps> = ({ onShouldSendMessage }) => {
     };
   });
 
-  const handleOnChange = (text: string) => {
+  const handleOnChange = useCallback((text: string) => {
     collapseItems();
-    debounce(() => setMessage(text), 500);
-  };
+    if (expanded.value === 1) setTimeout(() => setMessage(text), 400);
+    else setMessage(text);
+  }, []);
   const onSend = () => {
     onShouldSendMessage(message);
     setMessage("");
@@ -109,7 +109,10 @@ const MessageInput: FC<MessageInputProps> = ({ onShouldSendMessage }) => {
           style={styles.messageInput}
           multiline
           onFocus={collapseItems}
+          value={message}
           onChangeText={handleOnChange}
+          defaultValue=""
+          maxLength={500}
         />
         {message.length > 0 ? (
           <TouchableOpacity onPress={onSend}>
