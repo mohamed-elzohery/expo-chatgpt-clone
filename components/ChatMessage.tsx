@@ -1,6 +1,11 @@
 import Colors from "@/constants/Colors";
-
 import { Message, Role } from "@/utils/interfaces/Messages";
+// import {
+//   copyImageToClipboard,
+//   downloadAndSaveImage,
+//   shareImage,
+// } from "@/utils/Image";
+// import { Message, Role } from "@/utils/Interfaces";
 import { Link } from "expo-router";
 import {
   View,
@@ -19,6 +24,24 @@ const ChatMessage = ({
   prompt,
   loading,
 }: Message & { loading?: boolean }) => {
+  const contextItems = [
+    {
+      title: "Copy",
+      systemIcon: "doc.on.doc",
+      action: () => {},
+    },
+    {
+      title: "Save to Photos",
+      systemIcon: "arrow.down.to.line",
+      action: () => {},
+    },
+    {
+      title: "Share",
+      systemIcon: "square.and.arrow.up",
+      action: () => {},
+    },
+  ];
+
   return (
     <View style={styles.row}>
       {role === Role.Bot ? (
@@ -34,7 +57,31 @@ const ChatMessage = ({
           style={styles.avatar}
         />
       )}
-      <Text style={styles.text}>{content}</Text>
+
+      {loading ? (
+        <View style={styles.loading}>
+          <ActivityIndicator color={Colors.primary} size="small" />
+        </View>
+      ) : (
+        <>
+          {content === "" && imageUrl ? (
+            <ContextMenu.Root>
+              <ContextMenu.Trigger>
+                <Link href={"/(auth)/(drawer)"} asChild>
+                  <Pressable>
+                    <Image
+                      source={{ uri: imageUrl }}
+                      style={styles.previewImage}
+                    />
+                  </Pressable>
+                </Link>
+              </ContextMenu.Trigger>
+            </ContextMenu.Root>
+          ) : (
+            <Text style={styles.text}>{content}</Text>
+          )}
+        </>
+      )}
     </View>
   );
 };

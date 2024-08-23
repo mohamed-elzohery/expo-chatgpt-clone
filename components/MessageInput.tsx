@@ -70,8 +70,7 @@ const MessageInput: FC<MessageInputProps> = ({ onShouldSendMessage }) => {
 
   const handleOnChange = useCallback((text: string) => {
     collapseItems();
-    if (expanded.value === 1) setTimeout(() => setMessage(text), 400);
-    else setMessage(text);
+    setMessage(text);
   }, []);
   const onSend = () => {
     onShouldSendMessage(message);

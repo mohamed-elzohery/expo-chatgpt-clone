@@ -25,7 +25,7 @@ const CustomDrawerElement = (props: any) => {
   return (
     <View style={{ flex: 1, marginTop: top, marginBottom: bottom }}>
       <View style={styles.header}>
-        <View style={styles.searchSection}>
+        <View style={[styles.searchSection]}>
           <Ionicons
             name="search"
             size={16}
@@ -175,7 +175,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFF",
     padding: 12,
     paddingBottom: 0,
-    marginBottom: -40,
   },
   searchSection: {
     flexDirection: "row",

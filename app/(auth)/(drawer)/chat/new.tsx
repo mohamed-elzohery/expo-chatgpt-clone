@@ -43,33 +43,6 @@ const index = () => {
     setGptVersion(version);
   };
 
-  if (!apiKey || !organization) {
-    return <Redirect href="/(auth)/(modal)/settings" />;
-  }
-
-  const onLayout = (event: any) => {
-    const { height } = event.nativeEvent.layout;
-    setHeight(height);
-  };
-  const getCompletions = (message: string) => {
-    if (messages.length === 0) {
-      console.log("started new chat");
-    }
-    setMessages([
-      { content: message, role: Role.User },
-      { content: "", role: Role.Bot },
-    ]);
-    openAI.chat.stream({
-      messages: [
-        {
-          role: "user",
-          content: message,
-        },
-      ],
-      model: gptVersion === "3.5" ? "gpt-3.5-turbo" : "gpt-3.5-turbo",
-    });
-  };
-
   useEffect(() => {
     const handleNewMessage = (payload: any) => {
       setMessages((messages) => {
@@ -96,6 +69,33 @@ const index = () => {
       openAI.chat.removeListener("onChatMessageReceived");
     };
   }, [openAI]);
+
+  if (!apiKey || !organization) {
+    return <Redirect href="/(auth)/(modal)/settings" />;
+  }
+
+  const onLayout = (event: any) => {
+    const { height } = event.nativeEvent.layout;
+    setHeight(height);
+  };
+  const getCompletions = (message: string) => {
+    if (messages.length === 0) {
+      console.log("started new chat");
+    }
+    setMessages([
+      { content: message, role: Role.User },
+      { content: "", role: Role.Bot },
+    ]);
+    openAI.chat.stream({
+      messages: [
+        {
+          role: "user",
+          content: message,
+        },
+      ],
+      model: gptVersion === "3.5" ? "gpt-3.5-turbo" : "gpt-3.5-turbo",
+    });
+  };
 
   return (
     <View style={defaultStyles.pageContainer}>

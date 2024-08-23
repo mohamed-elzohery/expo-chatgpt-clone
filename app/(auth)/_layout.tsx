@@ -1,12 +1,9 @@
 import { View, Text } from "react-native";
 import React from "react";
-import { Slot, Stack, useRouter } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import Colors from "@/constants/Colors";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { Ionicons } from "@expo/vector-icons";
 
 const _layout = () => {
-  const router = useRouter();
   return (
     <Stack
       screenOptions={{

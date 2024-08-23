@@ -15,14 +15,12 @@ import {
 } from "react-native";
 import { useMMKVString } from "react-native-mmkv";
 const Page = () => {
-  const [key, setKey] = useMMKVString("apiKey", Storage);
-  const [organization, setOrganization] = useMMKVString("org", Storage);
-
   const [apiKey, setApiKey] = useState("");
   const [org, setOrg] = useState("");
-  const router = useRouter();
-
   const { signOut } = useAuth();
+  const router = useRouter();
+  const [key, setKey] = useMMKVString("apiKey", Storage);
+  const [organization, setOrganization] = useMMKVString("org", Storage);
 
   const saveApiKey = async () => {
     setKey(apiKey);
@@ -34,13 +32,13 @@ const Page = () => {
     setKey("");
     setOrganization("");
   };
-
+  console.log("key", key);
   return (
     <View style={styles.container}>
       <Stack.Screen
         options={{
           headerRight: () => {
-            if (!key) return <></>;
+            if (!key) return <View />;
             return (
               <TouchableOpacity
                 onPress={() => router.back()}
@@ -96,7 +94,13 @@ const Page = () => {
           </TouchableOpacity>
         </>
       )}
-      <Button title="Sign Out" onPress={() => signOut()} color={Colors.grey} />
+      <View style={{ marginTop: 9 }}>
+        <Button
+          title="Sign Out"
+          onPress={() => signOut()}
+          color={Colors.grey}
+        />
+      </View>
     </View>
   );
 };
@@ -119,7 +123,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     backgroundColor: "#fff",
   },
-
   buttonText: {
     color: "white",
     textAlign: "center",

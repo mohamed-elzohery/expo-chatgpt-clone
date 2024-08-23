@@ -9,7 +9,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 const BottomLoginSheet = () => {
   const { bottom } = useSafeAreaInsets();
   return (
-    <View style={[styles.container, { paddingBottom: bottom }]}>
+    <View style={[styles.container, { paddingBottom: bottom + 30 }]}>
       <TouchableOpacity style={[defaultStyles.btn, styles.lightBtn]}>
         <Ionicons name="logo-apple" size={14} style={styles.iconBtn} />
         <Text style={styles.btnLightText}>Continue with Apple</Text>
