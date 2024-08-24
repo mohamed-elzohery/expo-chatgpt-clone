@@ -1,11 +1,12 @@
 import { View, StyleSheet, KeyboardAvoidingView, Platform } from "react-native";
-import React, { FC, useCallback, useState } from "react";
+import React, { FC, useCallback, useEffect, useRef, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Animated, {
   Extrapolation,
   interpolate,
   useAnimatedStyle,
   useSharedValue,
+  withSpring,
   withTiming,
 } from "react-native-reanimated";
 import { BlurView } from "expo-blur";
@@ -28,12 +29,13 @@ const MessageInput: FC<MessageInputProps> = ({ onShouldSendMessage }) => {
   const { bottom } = useSafeAreaInsets();
   const expanded = useSharedValue(0);
   const [message, setMessage] = useState("");
+  const inputRef = useRef<TextInput>(null);
   const expandItems = () => {
-    expanded.value = withTiming(1, { duration: 400 });
+    expanded.value = withSpring(1, { duration: 400 });
   };
 
   const collapseItems = () => {
-    expanded.value = withTiming(0, { duration: 400 });
+    expanded.value = withSpring(0, { duration: 400 });
   };
 
   const expandBtnStyle = useAnimatedStyle(() => {
@@ -69,7 +71,7 @@ const MessageInput: FC<MessageInputProps> = ({ onShouldSendMessage }) => {
   });
 
   const handleOnChange = useCallback((text: string) => {
-    collapseItems();
+    if (expanded.value === 1) collapseItems();
     setMessage(text);
   }, []);
   const onSend = () => {
@@ -112,6 +114,7 @@ const MessageInput: FC<MessageInputProps> = ({ onShouldSendMessage }) => {
           onChangeText={handleOnChange}
           defaultValue=""
           maxLength={500}
+          ref={inputRef}
         />
         {message.length > 0 ? (
           <TouchableOpacity onPress={onSend}>

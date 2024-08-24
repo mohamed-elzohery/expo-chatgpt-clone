@@ -1,11 +1,11 @@
 import Colors from "@/constants/Colors";
+import {
+  copyImageToClipboard,
+  downloadAndSaveImage,
+  shareImage,
+} from "@/utils/image/image";
 import { Message, Role } from "@/utils/interfaces/Messages";
-// import {
-//   copyImageToClipboard,
-//   downloadAndSaveImage,
-//   shareImage,
-// } from "@/utils/Image";
-// import { Message, Role } from "@/utils/Interfaces";
+
 import { Link } from "expo-router";
 import {
   View,
@@ -28,17 +28,17 @@ const ChatMessage = ({
     {
       title: "Copy",
       systemIcon: "doc.on.doc",
-      action: () => {},
+      action: () => copyImageToClipboard(imageUrl!),
     },
     {
       title: "Save to Photos",
       systemIcon: "arrow.down.to.line",
-      action: () => {},
+      action: () => downloadAndSaveImage(imageUrl!),
     },
     {
       title: "Share",
       systemIcon: "square.and.arrow.up",
-      action: () => {},
+      action: () => shareImage(imageUrl!),
     },
   ];
 
@@ -67,15 +67,38 @@ const ChatMessage = ({
           {content === "" && imageUrl ? (
             <ContextMenu.Root>
               <ContextMenu.Trigger>
-                <Link href={"/(auth)/(drawer)"} asChild>
-                  <Pressable>
-                    <Image
-                      source={{ uri: imageUrl }}
-                      style={styles.previewImage}
-                    />
-                  </Pressable>
-                </Link>
+                {/* <Link
+                  href={`/(auth)/(modal)/image/${encodeURIComponent(
+                    imageUrl as string
+                  )}?prompt=${encodeURIComponent(prompt!)}`}
+                  asChild
+                > */}
+                <Pressable>
+                  <Image
+                    source={{ uri: imageUrl }}
+                    style={styles.previewImage}
+                  />
+                </Pressable>
+                {/* </Link> */}
               </ContextMenu.Trigger>
+              <ContextMenu.Content
+                alignOffset={"0"}
+                avoidCollisions={"1"}
+                collisionPadding={0}
+                loop={false}
+              >
+                {contextItems.map((item, index) => (
+                  <ContextMenu.Item key={item.title} onSelect={item.action}>
+                    <ContextMenu.ItemTitle>{item.title}</ContextMenu.ItemTitle>
+                    <ContextMenu.ItemIcon
+                      ios={{
+                        name: item.systemIcon,
+                        pointSize: 18,
+                      }}
+                    />
+                  </ContextMenu.Item>
+                ))}
+              </ContextMenu.Content>
             </ContextMenu.Root>
           ) : (
             <Text style={styles.text}>{content}</Text>

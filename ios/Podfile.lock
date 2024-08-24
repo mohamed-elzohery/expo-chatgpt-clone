@@ -229,6 +229,8 @@ PODS:
     - ExpoModulesCore
   - ExpoBlur (13.0.2):
     - ExpoModulesCore
+  - ExpoClipboard (6.0.3):
+    - ExpoModulesCore
   - ExpoCrypto (13.0.2):
     - ExpoModulesCore
   - ExpoDocumentPicker (12.0.2):
@@ -272,6 +274,8 @@ PODS:
     - ReactCommon/turbomodule/core
     - Yoga
   - ExpoSecureStore (13.0.2):
+    - ExpoModulesCore
+  - ExpoSharing (12.0.1):
     - ExpoModulesCore
   - ExpoSystemUI (3.0.7):
     - ExpoModulesCore
@@ -1588,6 +1592,7 @@ DEPENDENCIES:
   - expo-dev-menu-interface (from `../node_modules/expo-dev-menu-interface/ios`)
   - ExpoAsset (from `../node_modules/expo-asset/ios`)
   - ExpoBlur (from `../node_modules/expo-blur/ios`)
+  - ExpoClipboard (from `../node_modules/expo-clipboard/ios`)
   - ExpoCrypto (from `../node_modules/expo-crypto/ios`)
   - ExpoDocumentPicker (from `../node_modules/expo-document-picker/ios`)
   - ExpoFileSystem (from `../node_modules/expo-file-system/ios`)
@@ -1599,6 +1604,7 @@ DEPENDENCIES:
   - ExpoMediaLibrary (from `../node_modules/expo-media-library/ios`)
   - ExpoModulesCore (from `../node_modules/expo-modules-core`)
   - ExpoSecureStore (from `../node_modules/expo-secure-store/ios`)
+  - ExpoSharing (from `../node_modules/expo-sharing/ios`)
   - ExpoSystemUI (from `../node_modules/expo-system-ui/ios`)
   - ExpoWebBrowser (from `../node_modules/expo-web-browser/ios`)
   - EXSplashScreen (from `../node_modules/expo-splash-screen/ios`)
@@ -1706,6 +1712,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-asset/ios"
   ExpoBlur:
     :path: "../node_modules/expo-blur/ios"
+  ExpoClipboard:
+    :path: "../node_modules/expo-clipboard/ios"
   ExpoCrypto:
     :path: "../node_modules/expo-crypto/ios"
   ExpoDocumentPicker:
@@ -1728,6 +1736,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-modules-core"
   ExpoSecureStore:
     :path: "../node_modules/expo-secure-store/ios"
+  ExpoSharing:
+    :path: "../node_modules/expo-sharing/ios"
   ExpoSystemUI:
     :path: "../node_modules/expo-system-ui/ios"
   ExpoWebBrowser:
@@ -1880,6 +1890,7 @@ SPEC CHECKSUMS:
   expo-dev-menu-interface: be32c09f1e03833050f0ee290dcc86b3ad0e73e4
   ExpoAsset: 323700f291684f110fb55f0d4022a3362ea9f875
   ExpoBlur: fa53f874e7b208bc3756d1bf07903c12e790beb1
+  ExpoClipboard: 23d203f5d4843699fbc45be1cc4fe1fbd811a6fa
   ExpoCrypto: 156078f266bf28f80ecf5e2a9c3a0d6ffce07a1c
   ExpoDocumentPicker: a82eaccc62ecb62662d5a6ca7a8ef40b71daa521
   ExpoFileSystem: 80bfe850b1f9922c16905822ecbf97acd711dc51
@@ -1891,6 +1902,7 @@ SPEC CHECKSUMS:
   ExpoMediaLibrary: 250bf2659264163e428da5f867493b4cccd35ef9
   ExpoModulesCore: ae1a4244021797374769ef44499fc4313d2ac676
   ExpoSecureStore: 060cebcb956b80ddae09821610ac1aa9e1ac74cd
+  ExpoSharing: 8db05dd85081219f75989a3db2c92fe5e9741033
   ExpoSystemUI: d4f065a016cae6721b324eb659cdee4d4cf0cb26
   ExpoWebBrowser: 7595ccac6938eb65b076385fd23d035db9ecdc8e
   EXSplashScreen: fbf0ec78e9cee911df188bf17b4fe51d15a84b87
@@ -1961,6 +1973,6 @@ SPEC CHECKSUMS:
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   Yoga: 950bbfd7e6f04790fdb51149ed51df41f329fcc8
 
-PODFILE CHECKSUM: 0adb1cb80ff8bb3f3ff68ae429694185b62c14dc
+PODFILE CHECKSUM: 7e04a35b9f5322fd09d0f199d1a9b33afdc0f67c
 
 COCOAPODS: 1.15.2
