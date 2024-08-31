@@ -32,7 +32,6 @@ const Page = () => {
     setKey("");
     setOrganization("");
   };
-  console.log("key", key);
   return (
     <View style={styles.container}>
       <Stack.Screen
