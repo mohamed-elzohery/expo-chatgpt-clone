@@ -1,7 +1,5 @@
 import {
   View,
-  Text,
-  TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
   Keyboard,
@@ -12,10 +10,9 @@ import { FlashList } from "@shopify/flash-list";
 import React, { useEffect, useMemo, useState } from "react";
 import { useAuth } from "@clerk/clerk-expo";
 import { defaultStyles } from "@/constants/Styles";
-import { Redirect, Stack, useRouter } from "expo-router";
+import { Redirect, Stack, useLocalSearchParams, useRouter } from "expo-router";
 import HeaderDropDown from "@/components/HeaderDropdown";
 import MessageInput from "@/components/MessageInput";
-import { ScrollView } from "react-native-gesture-handler";
 import MessageIdeas from "@/components/MessageIdeas";
 import ChatMessage from "@/components/ChatMessage";
 import { Message, Role } from "@/utils/interfaces/Messages";
@@ -23,6 +20,8 @@ import { useMMKVString } from "react-native-mmkv";
 import { Storage } from "@/utils/storage";
 import { Drawer } from "expo-router/drawer";
 import OpenaAi from "react-native-openai";
+import { useSQLiteContext } from "expo-sqlite";
+import { addChat, addMessage } from "@/utils/storage/Database";
 
 const index = () => {
   const { signOut } = useAuth();
@@ -30,6 +29,11 @@ const index = () => {
   const [apiKey] = useMMKVString("apiKey", Storage);
   const [organization, setOrganization] = useMMKVString("org", Storage);
   const [height, setHeight] = useState(0);
+  const db = useSQLiteContext();
+  let { id } = useLocalSearchParams<{ id: string }>();
+
+  const [chatId, setChatId] = useState(id);
+
   const openAI = useMemo(
     () =>
       new OpenaAi({
@@ -51,14 +55,12 @@ const index = () => {
           messages[messages.length - 1].content += newMessage;
           return [...messages];
         }
-        //  if (payload.choices[0]?.finishReason) {
-        //    // save the last message
-
-        //    addMessage(db, parseInt(chatIdRef.current), {
-        //      content: messages[messages.length - 1].content,
-        //      role: Role.Bot,
-        //    });
-        //  }
+        if (payload.choices[0]?.finishReason) {
+          addMessage(db, parseInt(chatId), {
+            content: messages[messages.length - 1].content,
+            role: Role.Bot,
+          });
+        }
         return messages;
       });
     };
@@ -68,7 +70,7 @@ const index = () => {
     return () => {
       openAI.chat.removeListener("onChatMessageReceived");
     };
-  }, [openAI]);
+  }, [openAI, chatId]);
 
   if (!apiKey || !organization) {
     return <Redirect href="/(auth)/(modal)/settings" />;
@@ -80,12 +82,26 @@ const index = () => {
   };
   const getCompletions = (message: string) => {
     if (messages.length === 0) {
-      console.log("started new chat");
+      addChat(db, message).then((res) => {
+        const chatID = res.lastInsertRowId;
+        setChatId(chatID.toString());
+        addMessage(db, parseInt(chatId), { content: message, role: Role.User });
+      });
+      setMessages([
+        { content: message, role: Role.User },
+        { content: "", role: Role.Bot },
+      ]);
+    } else {
+      addMessage(db, parseInt(chatId), {
+        content: message,
+        role: Role.User,
+      });
+      setMessages((prev) => [
+        ...prev,
+        { content: message, role: Role.User },
+        { content: "", role: Role.Bot },
+      ]);
     }
-    setMessages([
-      { content: message, role: Role.User },
-      { content: "", role: Role.Bot },
-    ]);
     openAI.chat.stream({
       messages: [
         {
@@ -134,12 +150,6 @@ const index = () => {
       <KeyboardAvoidingView
         behavior={Platform.OS === "android" ? "height" : "padding"}
         keyboardVerticalOffset={60}
-        // style={{
-        //   position: "absolute",
-        //   left: 0,
-        //   bottom: 0,
-        //   width: "100%",
-        // }}
       >
         <MessageIdeas onSelectMessage={getCompletions} />
         <MessageInput onShouldSendMessage={getCompletions} />
